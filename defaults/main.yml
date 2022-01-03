@@ -23,7 +23,7 @@ unifi_extra_repos:
 unifi_packages:
   - unifi
   - adoptopenjdk-8-hotspot
-   -mongodb-org
+  - mongodb-org
 
 unifi_remove_first:
   - openjdk-11-*
