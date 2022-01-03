@@ -5,6 +5,8 @@
   ansible.builtin.apt:
     update_cache: yes
   when: ansible_distribution == "Debian"
+  tags:
+    - unifi
 
 - name: install prerequisite packages for unifi
   ansible.builtin.apt:
@@ -12,6 +14,8 @@
     state: present
   with_items: "{{ unifi_extra_packages }}"
   when: ansible_distribution == "Debian"
+  tags:
+    - unifi
 
 - name: remove openjdk packages
   ansible.builtin.apt:
@@ -19,6 +23,8 @@
     state: absent
   with_items: "{{ unifi_remove_first }}"
   when: ansible_distribution == "Debian"
+  tags:
+    - unifi
 
 - name: add an apt signing keys for unifi/mongodb/java repositories
   ansible.builtin.apt_key:
@@ -26,6 +32,8 @@
     state: present
   with_items: "{{ unifi_extra_repo_keys }}"
   when: ansible_distribution == "Debian"
+  tags:
+    - unifi
 
 - name: add unifi/mongodb/java repositories
   ansible.builtin.apt_repository:
@@ -34,11 +42,15 @@
     filename: "{{ item.path }}"
   with_items: "{{ unifi_extra_repos }}"
   when: ansible_distribution == "Debian"
+  tags:
+    - unifi
 
 - name: update the apt cache
   ansible.builtin.apt:
     update_cache: yes
   when: ansible_distribution == "Debian"
+  tags:
+    - unifi
 
 - name: install packages for unifi/mongodb/java
   ansible.builtin.apt:
@@ -46,6 +58,8 @@
     state: present
   with_items: "{{ unifi_packages }}"
   when: ansible_distribution == "Debian"
+  tags:
+    - unifi
 
 - name: start and enable the unifi, mongodb and java services
   ansible.builtin.service:
@@ -54,3 +68,5 @@
     enabled: yes
   with_items: "{{ unifi_services }}"
   when: ansible_distribution == "Debian"
+  tags:
+    - unifi
