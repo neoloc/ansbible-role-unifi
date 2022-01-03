@@ -1,6 +1,8 @@
 ---
 # defaults file for role
 
+unifi_configure: false
+
 unifi_extra_packages:
   - apt-transport-https
   - ca-certificates
