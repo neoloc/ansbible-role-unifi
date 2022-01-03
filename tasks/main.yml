@@ -1,0 +1,56 @@
+---
+# tasks file for role
+
+- name: update the apt cache
+  ansible.builtin.apt:
+    update_cache: yes
+  when: ansible_distribution == "Debian"
+
+- name: install prerequisite packages for unifi
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ unifi_extra_packages }}"
+  when: ansible_distribution == "Debian"
+
+- name: remove openjdk packages
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: absent
+  with_items: "{{ unifi_remove_first }}"
+  when: ansible_distribution == "Debian"
+
+- name: add an apt signing keys for unifi/mongodb/java repositories
+  ansible.builtin.apt_key:
+    url: "{{ item }}"
+    state: present
+  with_items: "{{ unifi_extra_repo_keys }}"
+  when: ansible_distribution == "Debian"
+
+- name: add unifi/mongodb/java repositories
+  ansible.builtin.apt_repository:
+    repo: "{{ item.repo }}"
+    state: present
+    filename: "{{ item.path }}"
+  with_items: "{{ unifi_extra_repos }}"
+  when: ansible_distribution == "Debian"
+
+- name: update the apt cache
+  ansible.builtin.apt:
+    update_cache: yes
+  when: ansible_distribution == "Debian"
+
+- name: install packages for unifi/mongodb/java
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ unifi_packages }}"
+  when: ansible_distribution == "Debian"
+
+- name: start and enable the unifi, mongodb and java services
+  ansible.builtin.service:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  with_items: "{{ unifi_services }}"
+  when: ansible_distribution == "Debian"
