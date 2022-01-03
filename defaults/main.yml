@@ -28,7 +28,7 @@ unifi_packages:
 unifi_remove_first:
   - openjdk-11-*
 
-unfi_services:
+unifi_services:
   - unifi
   - mongod
   - haveged
